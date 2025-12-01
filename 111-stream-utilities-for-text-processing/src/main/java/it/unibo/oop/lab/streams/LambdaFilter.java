@@ -7,8 +7,10 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.io.Serial;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -41,7 +43,19 @@ public final class LambdaFilter extends JFrame {
         /**
          * Commands.
          */
-        IDENTITY("No modifications", Function.identity());
+        IDENTITY("No modifications", Function.identity()),
+        LOWERED("To Lower", String::toLowerCase),
+        COUNTLINES("Count lines", s -> String.valueOf(s.lines().count())),
+        COUNTCHARS("Count char", s -> String.valueOf(s.length())),
+        LISTALPHABET("List alphabet", s -> Arrays.stream(s.split("\\s+"))
+            .filter(str -> !str.isEmpty())
+            .sorted()
+            .collect(Collectors.joining(" "))),
+        COUNTWORD("Count word", s -> Arrays.stream(s.split("\\s+"))
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+            .entrySet().stream()
+            .map(e -> e.getKey() + " -> " + e.getValue())
+            .collect(Collectors.joining("\n")));
 
         private final String commandName;
         private final Function<String, String> fun;
@@ -78,13 +92,17 @@ public final class LambdaFilter extends JFrame {
         centralPanel.add(left);
         centralPanel.add(right);
         panel1.add(centralPanel, BorderLayout.CENTER);
+
         final JButton apply = new JButton("Apply");
         apply.addActionListener(ev ->
             right.setText(
-                ((Command) Objects.requireNonNull(combo.getSelectedItem()))
-                    .translate(left.getText())
+                //the selected item in cmb_box is a Command,
+                //the selected then is passed to the 
+                //translator which need a text to modify
+                ((Command) Objects.requireNonNull(combo.getSelectedItem())).translate(left.getText())
             )
         );
+
         panel1.add(apply, BorderLayout.SOUTH);
         setContentPane(panel1);
         final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

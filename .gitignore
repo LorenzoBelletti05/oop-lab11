@@ -1,0 +1,10 @@
+# Ignora tutti i file compilati Java
+*.class
+
+# Ignora le cartelle di configurazione dell'IDE
+.vscode/
+.idea/
+
+# Ignora le cartelle di build e gradle
+build/
+.gradle/
