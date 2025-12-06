@@ -64,8 +64,6 @@ public final class AnotherConcurrentGUI extends JFrame {
         //adding the panel with all the data and set visible the frame
         this.getContentPane().add(panel);
         this.setVisible(true);
-
-
     }
 
     private void unEnable() {
