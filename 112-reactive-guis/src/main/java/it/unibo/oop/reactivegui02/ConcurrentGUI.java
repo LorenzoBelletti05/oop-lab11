@@ -24,7 +24,6 @@ public final class ConcurrentGUI extends JFrame {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConcurrentGUI.class);
     private final JLabel display = new JLabel("0");
 
-
     public ConcurrentGUI() {
         super();
         JFrameUtil.dimensionJFrame(this);
@@ -64,7 +63,7 @@ public final class ConcurrentGUI extends JFrame {
         this.getContentPane().add(panel);
         this.setVisible(true);
 
-        
+
     }
 
     /*
@@ -72,11 +71,10 @@ public final class ConcurrentGUI extends JFrame {
      * invisible outside and encapsulated.
      */
     private final class Agent implements Runnable {
-        
+
         private volatile boolean stop;
-        private volatile boolean up = true;        
+        private volatile boolean up = true;
         private int counter;
-        
 
         @Override
         public void run() {
@@ -89,7 +87,7 @@ public final class ConcurrentGUI extends JFrame {
                         this.counter++;
                     } else {
                         this.counter--;
-                    }                    
+                    }
                     Thread.sleep(100);
                 } catch (InvocationTargetException | InterruptedException ex) {
                     LOGGER.error(ex.getMessage(), ex);
@@ -112,6 +110,4 @@ public final class ConcurrentGUI extends JFrame {
             this.up = false;
         }
     }
-
-
 }
